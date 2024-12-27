@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/RC-diamond-GH/rcs_crawler_proxy_server/src/proxy"
-	"github.com/RC-diamond-GH/rcs_crawler_proxy_server/src/util"
+	"rcs_crawler_proxy_server/proxy"
+	"rcs_crawler_proxy_server/util"
 )
 
 func main() {

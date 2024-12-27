@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/RC-diamond-GH/rcs_crawler_proxy_server/src/util"
+	"rcs_crawler_proxy_server/util"
+
 	"github.com/sirupsen/logrus"
 )
 

@@ -1,4 +1,4 @@
-module github.com/RC-diamond-GH/rcs_crawler_proxy_server/src
+module rcs_crawler_proxy_server
 
 go 1.21
 

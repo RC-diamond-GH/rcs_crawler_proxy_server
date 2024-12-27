@@ -6,8 +6,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./src/config.json:/root/config.json:ro
-      - ./proxy.log:/root/proxy.log
+      - ./src/config.json:/rcs_crawler_proxy_server/config.json:ro
+      - ./proxy.log:/rcs_crawler_proxy_server/proxy.log
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
