@@ -4,12 +4,12 @@ WORKDIR /rcs_crawler_proxy_server
 
 COPY src/ ./
 
-RUN go mod tidy
-
-RUN go build -o proxy ./main.go
+RUN CGO_ENABLED=0 go mod tidy && CGO_ENABLED=0 go build -o MYAPP ./main.go
 
 FROM alpine:latest
 
-COPY --from=builder /rcs_crawler_proxy_server/proxy /rcs_crawler_proxy_server
+WORKDIR /rcs_crawler_proxy_server
 
-CMD ["/proxy"]
+COPY --from=builder /rcs_crawler_proxy_server/MYAPP /rcs_crawler_proxy_server/MYAPP
+
+CMD ["./MYAPP"]

@@ -4,10 +4,9 @@ proxies = {
     'http': 'http://localhost:8080'
 }
 
-url = 'http://www.rcdiamondgh.cc/db.html?key=abc'
+url = 'http://www.rcdiamondgh.cc/'
 
 header = {
-    "no-cache": "true"
 }
 
 if __name__ == '__main__':
