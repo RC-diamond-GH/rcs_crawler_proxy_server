@@ -1,0 +1,30 @@
+services:
+  app:
+    build: .
+    container_name: golang_app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./src/config.json:/root/config.json:ro
+      - ./proxy.log:/root/proxy.log
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - REDIS_DB=0
+    depends_on:
+      - redis
+      
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  redis_data:
