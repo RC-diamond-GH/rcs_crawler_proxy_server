@@ -1,12 +1,13 @@
 import requests
 
 proxies = {
-    'http': 'http://localhost:8080'
+    'http': 'http://10.52.111.143:8080'
 }
 
 url = 'http://www.rcdiamondgh.cc/'
 
 header = {
+    'No-Proxy-Cache':'whatever'
 }
 
 if __name__ == '__main__':

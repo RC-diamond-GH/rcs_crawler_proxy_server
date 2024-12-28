@@ -9,8 +9,9 @@ import (
 var ExpireTime int = 60
 
 type ConfigStruct struct {
-	Redis RedisConfig `json:"Redis"`
-	Cache CacheConfig `json:"Cache"`
+	Redis   RedisConfig `json:"Redis"`
+	Cache   CacheConfig `json:"Cache"`
+	Proxies []string    `json:"proxy"`
 }
 
 type RedisConfig struct {

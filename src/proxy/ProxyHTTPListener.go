@@ -11,8 +11,11 @@ import (
 )
 
 var logger logrus.Logger
+var proxyClients []*http.Client
+var localClient *http.Client
 
 func httpProxyHandler(writer http.ResponseWriter, reader *http.Request) {
+
 	logger.Info("Received request ", "method ", reader.Method, "url ", reader.URL.String())
 
 	requestInfo, err := util.BuildHTTPIdentifier(reader, "http")
@@ -52,9 +55,8 @@ func httpProxyHandler(writer http.ResponseWriter, reader *http.Request) {
 
 	logger.Info("Processing remote request...")
 	reqHeader := reader.Header
-	proxyClient := &http.Client{}
 
-	res, err := http.NewRequest(requestInfo.Method, requestInfo.URL, reader.Body)
+	req, err := http.NewRequest(requestInfo.Method, requestInfo.URL, reader.Body)
 	if err != nil {
 		logger.Errorf("Error while BUILDING HTTP request: %v", err)
 		http.Error(writer, "Proxy Server Error", http.StatusBadRequest)
@@ -62,13 +64,14 @@ func httpProxyHandler(writer http.ResponseWriter, reader *http.Request) {
 	}
 
 	for k, v := range reqHeader {
-		res.Header.Set(k, strings.Join(v, ","))
+		req.Header.Set(k, strings.Join(v, ","))
 	}
 
 	logger.Debug("Request headers", "headers", reqHeader)
 
 	// Request from remote
-	resp, err := proxyClient.Do(res)
+	resp, err := doRequest(req)
+	//resp, err := proxyClient.Do(req)
 	if err != nil {
 		logger.Errorf("Error while DOING HTTP request %v", err.Error())
 		http.Error(writer, "Proxy Server Error", http.StatusBadGateway)
@@ -103,9 +106,37 @@ func httpProxyHandler(writer http.ResponseWriter, reader *http.Request) {
 	}
 
 }
+func doRequest(req *http.Request) (*http.Response, error) {
+	logger.Infof("Direct request: %s", req.URL)
+	resp, err := localClient.Do(req)
+	if err == nil {
+		return resp, err
 
+	}
+	// Use proxy
+	logger.Infof("Request %s with proxy", req.URL)
+	for _, p := range proxyClients {
+		resp, err := p.Do(req)
+		if err == nil {
+			return resp, err
+		}
+	}
+	return resp, err
+}
 func HttpListener() {
 	logger = *util.GetLogger()
+
+	logger.Info("Initing proxy servers...")
+	for _, proxyURL := range HTTPProxyList {
+		logger.Infof("Initing proxy server: %s", proxyURL)
+		proxyClients = append(proxyClients, &http.Client{
+			Transport: &http.Transport{
+				Proxy: http.ProxyURL(proxyURL),
+			},
+		})
+	}
+	localClient = &http.Client{}
+
 	logger.Info("Start HTTP Listener on 8080")
 	http.HandleFunc("/", httpProxyHandler)
 	logger.Fatal(http.ListenAndServe(":8080", nil))

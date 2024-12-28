@@ -20,6 +20,10 @@ func main() {
 
 	util.InitLogger(file)
 
+	// 初始化 Proxy
+	proxy.ParseHTTPProxyList()
+	proxy.PingProxyServer()
+
 	// 初始化缓存数据库
 	util.InitCacheDatabase()
 	defer util.Cache.Close()
