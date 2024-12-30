@@ -3,5 +3,5 @@
 *.log
 *.exe
 
-server.crt
-server.key
+*.crt
+*.key
