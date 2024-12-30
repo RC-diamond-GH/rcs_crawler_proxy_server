@@ -2,3 +2,6 @@
 
 *.log
 *.exe
+
+server.crt
+server.key
