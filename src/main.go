@@ -29,7 +29,7 @@ func main() {
 	defer util.Cache.Close()
 
 	// 启动 HTTP 代理服务器
-	go proxy.HttpListener()
+	proxy.LaunchListeners()
 	console()
 	fmt.Println("Bye~")
 }

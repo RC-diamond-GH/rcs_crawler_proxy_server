@@ -12,4 +12,7 @@ WORKDIR /rcs_crawler_proxy_server
 
 COPY --from=builder /rcs_crawler_proxy_server/MYAPP /rcs_crawler_proxy_server/MYAPP
 
+COPY server.crt /rcs_crawler_proxy_server/server.crt
+COPY server.key /rcs_crawler_proxy_server/server.key
+
 CMD ["./MYAPP"]

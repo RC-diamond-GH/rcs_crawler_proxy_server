@@ -5,6 +5,7 @@ services:
     restart: unless-stopped
     ports:
       - "8080:8080"
+      - "8081:8081"
     volumes:
       - ./src/config.json:/rcs_crawler_proxy_server/config.json:ro
       - ./proxy.log:/rcs_crawler_proxy_server/proxy.log

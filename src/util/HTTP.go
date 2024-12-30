@@ -31,8 +31,19 @@ func (obj *HTTPRequestIdentifier) CacheKey() (string, error) {
 
 func BuildHTTPIdentifier(reader *http.Request, protocol string) (HTTPRequestIdentifier, error) {
 	method := reader.Method
+
 	reqURL := reader.URL
-	url := protocol + "://" + reqURL.Host + reqURL.Path + "?" + reqURL.Query().Encode()
+	url := protocol + "://"
+	if reader.Host == "" {
+		url += reqURL.Host
+	} else {
+		url += reader.Host
+	}
+	query := reqURL.Query().Encode()
+	if query != "" {
+		url += "?" + query
+	}
+	//url := protocol + "://" + reqURL.Host + reqURL.Path + "?" + reqURL.Query().Encode()
 	data, err := io.ReadAll(reader.Body)
 	return HTTPRequestIdentifier{
 		Method: method,
